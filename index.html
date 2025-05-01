@@ -7728,7 +7728,7 @@ Smaller $\tau$ <strong>prevents $\sigma$ from changing by large amounts</strong>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
 <li><strong>Rating Period</strong>: collection of games &amp; opponent ratings + RDs that are <strong>Batch-processed</strong> to output new Player Rating, RD, $\sigma$;
-Can be an <strong>event-driven</strong> implementation: change in RD (uncertainty increase <strong>due to Player inactivity</strong>) can be calculated when player enters mathching pool for their first game after a pause)</li>
+Can be an <strong>event-driven</strong> implementation: change in RD (uncertainty increase <strong>due to Player inactivity</strong>) can be back-calculated when player enters matching pool for their first game after the pause)</li>
 </ul>
 </div>
 </div>
@@ -7860,7 +7860,7 @@ Can be an <strong>event-driven</strong> implementation: change in RD (uncertaint
 <span class="n">rating</span><span class="p">,</span> <span class="n">RD</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span> <span class="mf">0.6</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>  <span class="c1"># Simulate 10 periods of inactivity</span>
     <span class="n">rating</span><span class="p">,</span> <span class="n">RD</span> <span class="o">=</span> <span class="n">update_glicko2</span><span class="p">(</span><span class="n">games</span><span class="o">=</span><span class="p">[],</span> <span class="n">rating</span><span class="o">=</span><span class="n">rating</span><span class="p">,</span> <span class="n">RD</span><span class="o">=</span><span class="n">RD</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"After period </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2"> rating stays same </span><span class="si">{</span><span class="n">rating</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, RD Expanded to </span><span class="si">{</span><span class="n">RD</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"After period </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">rating stays same </span><span class="si">{</span><span class="n">rating</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, RD Expanded to </span><span class="si">{</span><span class="n">RD</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7874,7 +7874,7 @@ Can be an <strong>event-driven</strong> implementation: change in RD (uncertaint
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>After period 10:
- rating stays same 1500.00, RD Expanded to 480.77
+rating stays same 1500.00, RD Expanded to 480.77
 </pre>
 </div>
 </div>
@@ -7887,7 +7887,7 @@ Can be an <strong>event-driven</strong> implementation: change in RD (uncertaint
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Glicko-2-Rating-Changes-between-players-in-a-game-don't-sum-to-zero!">Glicko 2 <strong>Rating Changes</strong> between players in a game <strong>don't sum to zero</strong>!<a class="anchor-link" href="#Glicko-2-Rating-Changes-between-players-in-a-game-don't-sum-to-zero!">¶</a></h3><p>(<strong>Unlike in Elo, where points gained = points lost</strong> and uncertaincy is constant for all players)</p>
+<h3 id="Glicko2-Rating-Changes-of-Opponents-in-a-game-don't-sum-to-zero!">Glicko2 <strong>Rating Changes</strong> of Opponents in a game <strong>don't sum to zero</strong>!<a class="anchor-link" href="#Glicko2-Rating-Changes-of-Opponents-in-a-game-don't-sum-to-zero!">¶</a></h3><p>(<strong>Unlike in Elo, where points gained = points lost</strong> and uncertaincy is constant for all players)</p>
 </div>
 </div>
 </div>
@@ -7899,7 +7899,8 @@ Can be an <strong>event-driven</strong> implementation: change in RD (uncertaint
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">start_rating</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># same rating, only RD is different</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 2 players played against each other</span>
+<span class="n">start_rating</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># same rating, only RD is different</span>
 <span class="n">player1_rating</span><span class="p">,</span> <span class="n">player1_RD</span> <span class="o">=</span> <span class="n">update_glicko2</span><span class="p">(</span><span class="n">start_rating</span><span class="p">,</span> <span class="n">RD</span><span class="o">=</span><span class="mi">350</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="p">[(</span><span class="n">start_rating</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)])</span>
 <span class="n">player2_rating</span><span class="p">,</span> <span class="n">player2_RD</span> <span class="o">=</span> <span class="n">update_glicko2</span><span class="p">(</span><span class="n">start_rating</span><span class="p">,</span> <span class="n">RD</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="p">[(</span><span class="n">start_rating</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Player 1: New rating </span><span class="si">{</span><span class="n">player1_rating</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, New RD </span><span class="si">{</span><span class="n">player1_RD</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
